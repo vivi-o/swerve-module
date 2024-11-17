@@ -73,18 +73,19 @@ public class ModuleRealIOVivie implements ModuleIOVivie {
     var turnconfig = new TalonFXConfiguration();
     turnconfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     turnconfig.Feedback.FeedbackRemoteSensorID = cancoderID;
-    turnconfig.Feedback.RotorToSensorRatio = 7.0 / 150.0;
+    turnconfig.Feedback.RotorToSensorRatio = 150.0 / 7.0;
     turnconfig.Feedback.SensorToMechanismRatio = 1.0;
     turnconfig.Slot0.kA = 0.0;
     turnconfig.Slot0.kD = 0.0;
     turnconfig.Slot0.kG = 0;
     turnconfig.Slot0.kI = 0;
-    turnconfig.Slot0.kP = 2;
+    turnconfig.Slot0.kP = 40;
     turnconfig.Slot0.kS = 0.0;
     turnconfig.Slot0.kV = 0;
     turnconfig.MotionMagic.MotionMagicCruiseVelocity = 10;
     turnconfig.MotionMagic.MotionMagicAcceleration = 10;
     turnconfig.ClosedLoopGeneral.ContinuousWrap = true;
+    turnconfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     turnTalon.getConfigurator().apply(turnconfig);
 

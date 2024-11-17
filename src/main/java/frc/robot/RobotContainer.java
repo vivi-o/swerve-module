@@ -27,11 +27,11 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDriveSubsystemVivie driveSubsystem = new SwerveDriveSubsystemVivie();
 
-  private DoubleSupplier angleSupplier = () -> Math.PI / 2;
+  private DoubleSupplier angleSupplier =
+      () -> Math.atan2(m_driverController.getLeftY(), m_driverController.getLeftX());
 
-  private DoubleSupplier angleSupplier2 = () -> 0;
-
-  private DoubleSupplier driveVoltSupplier = () -> 5.0;
+  private DoubleSupplier driveSupplier =
+      () -> 12 * (Math.hypot(m_driverController.getLeftX(), m_driverController.getLeftY()));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -63,8 +63,8 @@ public class RobotContainer {
     m_driverController.x().whileTrue(driveSubsystem.spinCmd(() -> Math.PI / 2));
     // m_driverController.x().whileTrue(driveSubsystem.spinCmd(angleSupplier2));
     // m_driverController.a().whileTrue(driveSubsystem.setTurnVoltsCmd(turnVoltSupplier));//
-    // m_driverController.a().whileTrue(driveSubsystem.turnAndDriveCmd(() -> Math.PI / 2, () -> 0));
-    driveSubsystem.setDefaultCommand(driveSubsystem.stopCmd(() -> 0));
+    driveSubsystem.setDefaultCommand(driveSubsystem.turnAndDriveCmd(angleSupplier, driveSupplier));
+    // driveSubsystem.setDefaultCommand(driveSubsystem.stopCmd(() -> 0));
   }
 
   /**
