@@ -79,7 +79,7 @@ public class ModuleRealIOVivie implements ModuleIOVivie {
     turnconfig.Slot0.kD = 0.0;
     turnconfig.Slot0.kG = 0;
     turnconfig.Slot0.kI = 0;
-    turnconfig.Slot0.kP = 40;
+    turnconfig.Slot0.kP = 10;
     turnconfig.Slot0.kS = 0.0;
     turnconfig.Slot0.kV = 0;
     turnconfig.MotionMagic.MotionMagicCruiseVelocity = 10;

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -63,7 +64,13 @@ public class RobotContainer {
     m_driverController.x().whileTrue(driveSubsystem.spinCmd(() -> Math.PI / 2));
     // m_driverController.x().whileTrue(driveSubsystem.spinCmd(angleSupplier2));
     // m_driverController.a().whileTrue(driveSubsystem.setTurnVoltsCmd(turnVoltSupplier));//
-    driveSubsystem.setDefaultCommand(driveSubsystem.turnAndDriveCmd(angleSupplier, driveSupplier));
+    driveSubsystem.setDefaultCommand(
+        driveSubsystem.driveChassis(
+            () ->
+                new ChassisSpeeds(
+                    m_driverController.getLeftX(),
+                    m_driverController.getLeftY(),
+                    m_driverController.getRightX())));
     // driveSubsystem.setDefaultCommand(driveSubsystem.stopCmd(() -> 0));
   }
 

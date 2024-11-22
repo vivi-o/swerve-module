@@ -1,12 +1,27 @@
 package frc.robot.subsystems.swerveDrive;
 
+import com.google.common.base.Supplier;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDriveSubsystemVivie extends SubsystemBase {
+
+  Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
+  Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
+  Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
+  Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+
+  // Creating my kinematics object using the module locations
+  SwerveDriveKinematics m_kinematics =
+      new SwerveDriveKinematics(
+          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   public static ModuleIOVivie[] createTalonFXModules() {
     return new ModuleIOVivie[] {
@@ -18,6 +33,7 @@ public class SwerveDriveSubsystemVivie extends SubsystemBase {
   }
 
   private final ModuleIOVivie[] modules = createTalonFXModules();
+
   private final ModuleIOInputsAutoLogged[] inputs =
       new ModuleIOInputsAutoLogged[] {
         new ModuleIOInputsAutoLogged(),
@@ -59,6 +75,17 @@ public class SwerveDriveSubsystemVivie extends SubsystemBase {
       module.setTurnPosition(r);
       module.setDriveVoltage(driveVolts);
     }
+  }
+
+  public Command driveChassis(Supplier<ChassisSpeeds> speeds) {
+    return this.run(
+        () -> {
+          SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds.get());
+          for (int i = 0; i < 4; i++) {
+            modules[i].setTurnPosition(moduleStates[i].angle);
+            modules[i].setDriveVoltage(moduleStates[i].speedMetersPerSecond);
+          }
+        });
   }
 
   public Command spinCmd(DoubleSupplier rad) {
